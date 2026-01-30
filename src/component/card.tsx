@@ -1,4 +1,4 @@
-// กำหนดหน้าตาข้อมูล
+// 1. กำหนดหน้าตาข้อมูลไส้ใน (อันนี้เราตกลงกันแล้ว ห้ามแก้ชื่อ)
 export interface UserData {
   username: string;
   repo: string;
@@ -6,63 +6,49 @@ export interface UserData {
   status: string;
 }
 
+// 2. กำหนดสเปคของ Props
 interface HistoryListProps {
-  history: UserData[]; // รายการข้อมูลที่จะส่งเข้ามา
-  onClear: () => void; // ปุ่มล้างข้อมูล
+  history: UserData[]; 
+  onClear: () => void;
 }
 
+// 3. เริ่มเขียน Component
 export const HistoryListView = ({ history, onClear }: HistoryListProps) => {
 
-  // --- 🛠️ Mock Data สำหรับเพื่อน ---
-  const isTestMode = false
-  if (isTestMode) {
+  // --- Mock Data (ข้อมูลทิพย์) ---
+  // ถ้าอยากเห็นหน้าตาตอนมีข้อมูล ให้แก้ตรงนี้เป็น true ระหว่างทำ
+  const useMockData = false 
+  
+  if (useMockData) {
     history = [
-      { username: "ElonMusk", repo: "twitter-algorithm", time: "10:00 AM", status: "Success" },
-      { username: "LinusTorvalds", repo: "linux-kernel", time: "10:05 AM", status: "Success" }
+        { username: "TestUser", repo: "TestRepo", time: "12:00", status: "OK" },
+        { username: "DevMan", repo: "ProjectA", time: "12:05", status: "OK" }
     ]
   }
-  // ------------------------------------
 
   return (
-    <div style={{ 
-      border: '1px solid #ddd', 
-      borderRadius: '15px', 
-      padding: '20px', 
-      background: '#ffffff',
-      height: '500px',
-      display: 'flex', 
-      flexDirection: 'column'
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-        <h3 style={{ margin: 0 }}>📋 Live Feed ({history.length})</h3>
-        <button onClick={onClear} style={{ border: 'none', background: 'none', color: 'red', cursor: 'pointer' }}>Clear</button>
+    // --- พื้นที่แก้ Design  ---
+    <div style={{ border: '1px solid gray', padding: '10px', height: '400px' }}>
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+         <h3>รายชื่อคนที่สแกนแล้ว ({history.length})</h3>
+         <button onClick={onClear}>ล้างค่า</button>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto' }}>
-        {history.length === 0 ? (
-          <p style={{ textAlign: 'center', color: '#ccc', marginTop: '40px' }}>ยังไม่มีใครสแกน...</p>
-        ) : (
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {history.map((user, index) => (
-              <li key={index} style={{ 
-                padding: '15px', 
-                marginBottom: '10px', 
-                background: index === 0 ? '#e6fffa' : '#f9f9f9', // คนล่าสุดสีเขียวอ่อน
-                borderRadius: '8px',
-                borderLeft: '4px solid #38b2ac',
-                animation: 'fadeIn 0.5s ease'
-              }}>
-                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>👤 {user.username}</div>
-                <div style={{ fontSize: '14px', color: '#555' }}>📂 Repo: {user.repo}</div>
-                <div style={{ fontSize: '12px', color: '#999', marginTop: '5px', display: 'flex', justifyContent: 'space-between' }}>
-                  <span>🕒 {user.time}</span>
-                  <span style={{ color: 'green' }}>✔ {user.status}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <ul>
+        {/* (ห้ามลบ .map) */}
+        {history.map((user, index) => (
+          
+          <li key={index} style={{ marginBottom: '10px', background: '#eee' }}>
+             <strong>{user.username}</strong> <br/>
+             <span>Repo: {user.repo}</span> <br/>
+             <small>{user.time}</small>
+          </li>
+
+        ))}
+      </ul>
+
     </div>
+    // ----------------------------------------
   )
 }
